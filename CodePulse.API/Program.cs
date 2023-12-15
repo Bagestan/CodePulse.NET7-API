@@ -1,4 +1,6 @@
 using CodePulse.API.Data;
+using CodePulse.API.Repositories.Implementation;
+using CodePulse.API.Repositories.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +17,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("CodePulseConnectionString"));
 });
 
+
+
+builder.Services.AddScoped<ICategoryRepositor, CategoryRepository>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -25,6 +31,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors(options =>
+{
+    options.AllowAnyHeader();
+    options.AllowAnyOrigin();
+    options.AllowAnyMethod();
+});
 
 app.UseAuthorization();
 
